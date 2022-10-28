@@ -32,4 +32,13 @@ public class Account {
     @OneToMany(mappedBy = "account")
     @Getter @Setter
     private List<Operation> operations;
+
+    public Account() {
+    }
+
+    public Account(User user, Long amount, Currency currency) {
+        this.user = user;
+        this.amount = amount;
+        this.currency = currency;
+    }
 }

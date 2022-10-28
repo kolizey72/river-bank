@@ -32,4 +32,13 @@ public class Operation {
     @Temporal(TemporalType.TIMESTAMP)
     @Getter @Setter
     private LocalDateTime dateTime;
+
+    public Operation() {
+    }
+
+    public Operation(Account account, Long amount, OperationType type) {
+        this.account = account;
+        this.amount = amount;
+        this.type = type;
+    }
 }

@@ -26,6 +26,10 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
+    public List<Account> findAllByUserId(long userId) {
+        return accountRepository.findAllByUserId(userId);
+    }
+
     public Account findById(long id) {
         return accountRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }

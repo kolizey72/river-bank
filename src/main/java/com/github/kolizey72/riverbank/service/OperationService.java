@@ -21,6 +21,14 @@ public class OperationService {
         return operationRepository.findAll();
     }
 
+    public List<Operation> findAllByUserId(long userId) {
+        return operationRepository.findAllByAccountUserId(userId);
+    }
+
+    public List<Operation> findAllByAccountNumber(long accountNumber) {
+        return operationRepository.findAllByAccountNumber(accountNumber);
+    }
+
     public Operation findById(long id) {
         return operationRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }

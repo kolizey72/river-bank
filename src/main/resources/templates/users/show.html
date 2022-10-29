@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.name}"></title>
+</head>
+<body>
+
+<h2 th:text="${user.name}">Mr. Name Surname</h2>
+<h5 th:text="${user.email}">email@email.com</h5>
+
+<form method="post" action="/logout">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <button type="submit">Log out</button>
+</form>
+
+<hr>
+
+<div th:if="${accounts}">
+    <h3>Accounts</h3>
+    <div th:each="account : ${accounts}">
+        <a th:href="@{/accounts/{num}(num=${account.number})}"
+           th:text="${#numbers.formatInteger(account.number, 6)}"></a>
+        <span th:text="|: ${account.getAmount()} ${account.getCurrency()}|"></span>
+    </div>
+</div>
+
+<h3 th:if="!${accounts}">No accounts yet</h3>
+
+<form method="post" th:action="@{/accounts}">
+    <select name="currency">
+        <option th:each="currency : ${T(com.github.kolizey72.riverbank.entity.Currency).values()}"
+                th:value="${currency}" th:text="${currency}"
+                th:selected="${currency == currency.RUB}"/>
+    </select>
+    <button type="submit">Add account</button>
+</form>
+
+
+</body>
+</html>

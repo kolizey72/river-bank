@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Account</title>
+</head>
+<body>
+
+<h3 th:text="'Account ' + ${#numbers.formatInteger(account.getNumber(), 6)}"></h3>
+<h4 th:text="|Balance: ${#numbers.formatInteger(account.amount, 0, 'COMMA')} ${account.currency}|"></h4>
+
+<form method="post" th:action="@{/accounts/deposit}">
+    <input type="hidden" name="accountNumber" th:value="${account.number}">
+    <input type="number" name="amount" placeholder="Amount">
+    <button type="submit">Deposit</button>
+</form>
+
+<form method="post" th:action="@{/accounts/withdraw}">
+    <input type="hidden" name="accountNumber" th:value="${account.number}">
+    <input type="number" name="amount" placeholder="Amount">
+    <button type="submit">Withdraw</button>
+</form>
+
+</body>
+</html>

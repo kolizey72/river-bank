@@ -29,7 +29,7 @@ public class Operation {
     @Getter @Setter
     private OperationType type;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_time", columnDefinition = "TIMESTAMP")
     @Getter @Setter
     private LocalDateTime dateTime;
 

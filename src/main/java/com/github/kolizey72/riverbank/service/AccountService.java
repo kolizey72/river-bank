@@ -30,7 +30,7 @@ public class AccountService {
         return accountRepository.findAllByUserId(userId);
     }
 
-    public Account findById(long id) {
+    public Account findByNumber(long id) {
         return accountRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
@@ -51,7 +51,7 @@ public class AccountService {
             throw new IllegalArgumentException("Amount can't be less or equals 0");
         }
 
-        Account account = findById(id);
+        Account account = findByNumber(id);
 
         account.setAmount(account.getAmount() + amount);
         operationService.create(new Operation(account, amount, OperationType.DEPOSIT));
@@ -63,7 +63,7 @@ public class AccountService {
             throw new IllegalArgumentException("Amount can't be less or equals 0");
         }
 
-        Account account = findById(id);
+        Account account = findByNumber(id);
 
         if (account.getAmount() < amount) {
             throw new IllegalArgumentException("Not enough money");
@@ -79,8 +79,8 @@ public class AccountService {
             throw new IllegalArgumentException("Amount can't be less or equals 0");
         }
 
-        Account sender = findById(senderId);
-        Account recipient = findById(recipientId);
+        Account sender = findByNumber(senderId);
+        Account recipient = findByNumber(recipientId);
 
         if (sender.getAmount() < amount) {
             throw new IllegalArgumentException("Not enough money");

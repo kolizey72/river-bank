@@ -11,13 +11,13 @@
 
 <form method="post" th:action="@{/accounts/deposit}">
     <input type="hidden" name="accountNumber" th:value="${account.number}">
-    <input type="number" name="amount" placeholder="Amount">
+    <input type="number" name="amount" placeholder="Amount" min="0" max="100000">
     <button type="submit">Deposit</button>
 </form>
 
 <form method="post" th:action="@{/accounts/withdraw}">
     <input type="hidden" name="accountNumber" th:value="${account.number}">
-    <input type="number" name="amount" placeholder="Amount">
+    <input type="number" name="amount" placeholder="Amount" min="0" max="100000">
     <button type="submit">Withdraw</button>
 </form>
 

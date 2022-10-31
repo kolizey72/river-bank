@@ -17,7 +17,7 @@
 <hr>
 
 <div th:if="${accounts}">
-    <h3>Accounts</h3>
+    <h3 th:text="|Accounts(${accounts.size()}/${user.maxAccounts})|">Accounts</h3>
     <div th:each="account : ${accounts}">
         <a th:href="@{/accounts/{num}(num=${account.number})}"
            th:text="${#numbers.formatInteger(account.number, 6)}"></a>
@@ -27,7 +27,7 @@
 
 <h3 th:if="!${accounts}">No accounts yet</h3>
 
-<form method="post" th:action="@{/accounts}">
+<form method="post" th:action="@{/accounts}" th:if="${accounts.size() < user.maxAccounts}">
     <select name="currency">
         <option th:each="currency : ${T(com.github.kolizey72.riverbank.entity.Currency).values()}"
                 th:value="${currency}" th:text="${currency}"

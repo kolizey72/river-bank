@@ -3,10 +3,13 @@ package com.github.kolizey72.riverbank.service;
 import com.github.kolizey72.riverbank.entity.Account;
 import com.github.kolizey72.riverbank.entity.Operation;
 import com.github.kolizey72.riverbank.entity.OperationType;
+import com.github.kolizey72.riverbank.entity.User;
 import com.github.kolizey72.riverbank.repository.AccountRepository;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -17,9 +20,13 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final OperationService operationService;
 
-    public AccountService(AccountRepository accountRepository, OperationService operationService) {
+
+    private final EntityManager entityManager;
+
+    public AccountService(AccountRepository accountRepository, OperationService operationService, EntityManager entityManager) {
         this.accountRepository = accountRepository;
         this.operationService = operationService;
+        this.entityManager = entityManager;
     }
 
     public List<Account> findAll() {
@@ -35,9 +42,14 @@ public class AccountService {
     }
 
     @Transactional
-    public void create(Account account) {
-        operationService.create(new Operation(account, 0L, OperationType.CREATION));
+    public void create(Account account, long userId) {
+        User user = entityManager.find(User.class, userId);
+
+        user.addAccount(account);
+        account.setUser(user);
+
         accountRepository.save(account);
+        operationService.create(new Operation(account, 0L, OperationType.CREATION));
     }
 
     @Transactional

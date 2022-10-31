@@ -53,7 +53,7 @@ public class AccountController {
     @PostMapping
     public String createAccount(Authentication authentication, @RequestParam("currency") Currency currency) {
         User user = (User) authentication.getPrincipal();
-        accountService.create(new Account(user, 0L, currency));
+        accountService.create(new Account(0L, currency), user.getId());
         return "redirect:/";
     }
 

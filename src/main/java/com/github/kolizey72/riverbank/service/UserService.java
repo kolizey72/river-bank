@@ -19,6 +19,9 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
 
+    private final int DEFAULT_MAX_ACCOUNTS = 5;
+    private final Currency DEFAULT_CURRENCY = Currency.RUB;
+
     private final UserRepository userRepository;
 
     private final AccountService accountService;
@@ -51,13 +54,13 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setMaxAccounts(5);
 
         userRepository.save(user);
 
         if (user.getAccounts() == null || user.getAccounts().isEmpty()) {
-            Account account = new Account(user, 0L, Currency.RUB);
-            accountService.create(account);
-            user.addAccount(account);
+            Account account = new Account(0L, DEFAULT_CURRENCY);
+            accountService.create(account, user.getId());
         }
     }
 

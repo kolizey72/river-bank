@@ -1,5 +1,6 @@
 package com.github.kolizey72.riverbank.entity;
 
+import com.github.kolizey72.riverbank.exception.ListOverflowException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +35,10 @@ public class User implements UserDetails {
     @Getter @Setter
     private String password;
 
+    @Column(name = "max_accounts")
+    @Getter @Setter
+    private int maxAccounts;
+
     @OneToMany(mappedBy = "user")
     @Getter @Setter
     private List<Account> accounts;
@@ -42,7 +47,11 @@ public class User implements UserDetails {
         if (accounts == null) {
             accounts = new ArrayList<>();
         }
-        accounts.add(account);
+        if (accounts.size() < maxAccounts) {
+            accounts.add(account);
+        } else {
+            throw new ListOverflowException("Accounts limit reached: " + maxAccounts);
+        }
     }
 
     @Override

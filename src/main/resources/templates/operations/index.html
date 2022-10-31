@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Operations</title>
+</head>
+<body>
+
+<h3 th:text="'Account ' + ${#numbers.formatInteger(account.number, 6)} + ' operations history'"></h3>
+
+<table>
+    <tr>
+        <th>Amount</th>
+        <th>Operation type</th>
+        <th>Date&Time</th>
+    </tr>
+    <tr th:each="operation : ${operations}"
+        th:styleappend="${operation.type.name() == 'DEPOSIT' ? 'color : green' : ''} + ${operation.type.name() == 'WITHDRAW' ? 'color : red' : ''}">
+        <td th:text="${operation.amount} + ' ' + ${account.currency}"></td>
+        <td th:text="${operation.type}"></td>
+        <td th:text="${#temporals.format(operation.dateTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
+    </tr>
+</table>
+
+</body>
+</html>

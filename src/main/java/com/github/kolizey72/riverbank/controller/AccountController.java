@@ -5,13 +5,13 @@ import com.github.kolizey72.riverbank.entity.Currency;
 import com.github.kolizey72.riverbank.entity.User;
 import com.github.kolizey72.riverbank.service.AccountService;
 import com.github.kolizey72.riverbank.service.OperationService;
-import org.springframework.boot.Banner;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.NoSuchElementException;
@@ -37,7 +37,6 @@ public class AccountController {
             if (accountService.findAllByUserId(user.getId()).stream().anyMatch(acc -> acc.getNumber().equals(num))) {
                 ModelAndView modelAndView = new ModelAndView("accounts/show");
                 modelAndView.addObject("account", account);
-                modelAndView.addObject("operations", operationService.findAllByAccountNumber(num));
                 return modelAndView;
             } else {
                 ModelAndView modelAndView = new ModelAndView("redirect:/error");
@@ -61,7 +60,11 @@ public class AccountController {
     @PostMapping("/deposit")
     public String deposit(@RequestParam("accountNumber") long accountNumber,
                           @RequestParam("amount") long amount) {
-        accountService.deposit(accountNumber, amount);
+        try {
+            accountService.deposit(accountNumber, amount);
+        } catch (IllegalArgumentException ignore) {
+            //TODO
+        }
         return "redirect:/accounts/" + accountNumber;
     }
 

@@ -27,8 +27,8 @@ public class OperationService {
         return operationRepository.findAllByAccountUserId(userId);
     }
 
-    public List<Operation> findAllByAccountNumber(long accountNumber) {
-        return operationRepository.findAllByAccountNumber(accountNumber);
+    public List<Operation> findAllByAccountNumberReverseOrder(long accountNumber) {
+        return operationRepository.findAllByAccountNumberOrderByDateTimeDesc(accountNumber);
     }
 
     public Operation findById(long id) {

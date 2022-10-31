@@ -11,5 +11,5 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
 
     List<Operation> findAllByAccountUserId(long userId);
 
-    List<Operation> findAllByAccountNumber(long accountNumber);
+    List<Operation> findAllByAccountNumberOrderByDateTimeDesc(long accountNumber);
 }

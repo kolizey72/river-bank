@@ -5,9 +5,12 @@
     <title>Account</title>
 </head>
 <body>
+<a href="/"><<< Go back</a>
 
 <h3 th:text="'Account ' + ${#numbers.formatInteger(account.getNumber(), 6)}">Account 000000</h3>
 <h4 th:text="|Balance: ${#numbers.formatInteger(account.amount, 0, 'COMMA')} ${account.currency}|">Balance: 1,000,000 RUB</h4>
+
+
 
 <form method="post" th:action="@{/accounts/deposit}">
     <input type="hidden" name="accountNumber" th:value="${account.number}">
@@ -20,8 +23,10 @@
     <input type="number" name="amount" placeholder="Amount" min="0" max="100000">
     <button type="submit">Withdraw</button>
 </form>
+<br/>
 
 <a th:href="@{/accounts/{num}/transfer(num=${account.number})}">Make a transfer</a>
+<br/>
 <a th:href="@{/accounts/{num}/operations(num=${account.number})}">Operations history</a>
 
 </body>

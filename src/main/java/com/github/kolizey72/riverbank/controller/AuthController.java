@@ -2,6 +2,9 @@ package com.github.kolizey72.riverbank.controller;
 
 import com.github.kolizey72.riverbank.entity.User;
 import com.github.kolizey72.riverbank.service.UserService;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,11 +23,17 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage() {
+        if (isAuthenticated()) {
+            return "redirect:/";
+        }
         return "auth/login";
     }
 
     @GetMapping("/registration")
     public String registrationPage(@ModelAttribute("user") User user) {
+        if (isAuthenticated()) {
+            return "redirect:/";
+        }
         return "auth/registration";
     }
 
@@ -33,5 +42,13 @@ public class AuthController {
         userService.register(user);
 
         return "redirect:/auth/login";
+    }
+
+    private boolean isAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || AnonymousAuthenticationToken.class.isAssignableFrom(authentication.getClass())) {
+            return false;
+        }
+        return authentication.isAuthenticated();
     }
 }

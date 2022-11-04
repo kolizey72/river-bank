@@ -12,6 +12,8 @@
 </head>
 <body>
 
+<a th:href="@{/accounts/{num}(num=${senderNumber})}"><<< Go back</a>
+
 <h3>Make a transfer</h3>
 
 <form method="post">
@@ -28,6 +30,7 @@
         <label for="amount">Amount </label>
         <input name="amount" id="amount" type="number" min="0" max="100000">
     </p>
+    <br/>
 
     <button type="submit">Transfer</button>
 </form>

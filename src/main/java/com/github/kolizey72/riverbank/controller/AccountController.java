@@ -28,7 +28,7 @@ public class AccountController {
             User user = (User) authentication.getPrincipal();
 
             if (accountService.findAllByUserId(user.getId()).stream().anyMatch(acc -> acc.getNumber().equals(num))) {
-                ModelAndView modelAndView = new ModelAndView("accounts/show");
+                ModelAndView modelAndView = new ModelAndView("accounts/accountDetails");
                 modelAndView.addObject("account", accountService.findByNumber(num));
                 return modelAndView;
             } else {
@@ -83,7 +83,7 @@ public class AccountController {
 
         try {
             if (accountService.findAllByUserId(user.getId()).stream().anyMatch(acc -> acc.getNumber().equals(senderNumber))) {
-                ModelAndView modelAndView = new ModelAndView("accounts/transfer");
+                ModelAndView modelAndView = new ModelAndView("accounts/transferPage");
                 modelAndView.addObject("senderNumber", senderNumber);
                 return modelAndView;
             } else {

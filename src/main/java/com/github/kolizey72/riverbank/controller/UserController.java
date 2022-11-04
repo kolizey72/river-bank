@@ -27,6 +27,6 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("accounts", accounts);
 
-        return "users/show";
+        return "users/userDetails";
     }
 }

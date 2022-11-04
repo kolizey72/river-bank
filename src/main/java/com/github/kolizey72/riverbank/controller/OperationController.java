@@ -32,7 +32,7 @@ public class OperationController {
             Account account = accountService.findByNumber(num);
 
             if (accountService.findAllByUserId(user.getId()).stream().anyMatch(acc -> acc.getNumber().equals(num))) {
-                ModelAndView modelAndView = new ModelAndView("accounts/operations");
+                ModelAndView modelAndView = new ModelAndView("accounts/operationsList");
                 modelAndView.addObject("account", account);
                 modelAndView.addObject("operations", operationService.findAllByAccountNumberReverseOrder(num));
                 return modelAndView;

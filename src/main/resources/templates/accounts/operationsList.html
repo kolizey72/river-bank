@@ -6,7 +6,11 @@
 </head>
 <body>
 
-<h3 th:text="'Account ' + ${#numbers.formatInteger(account.number, 6)} + ' operations history'"></h3>
+<a th:href="@{/accounts/{num}(num=${account.number})}"><<< Go back</a>
+
+<h3 th:text="'Account ' + ${#numbers.formatInteger(account.number, 6)} + ' operations history'">Account 000000</h3>
+
+
 
 <table>
     <tr>

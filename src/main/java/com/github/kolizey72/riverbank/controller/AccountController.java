@@ -4,13 +4,10 @@ import com.github.kolizey72.riverbank.entity.Account;
 import com.github.kolizey72.riverbank.entity.Currency;
 import com.github.kolizey72.riverbank.entity.User;
 import com.github.kolizey72.riverbank.service.AccountService;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/accounts")
@@ -23,24 +20,11 @@ public class AccountController {
     }
 
     @RequestMapping("/{num}")
-    public ModelAndView accountDetails(@PathVariable long num, Authentication authentication) {
-        try {
+    public String accountDetails(@PathVariable long num, Authentication authentication, Model model) {
             User user = (User) authentication.getPrincipal();
 
-            if (accountService.findAllByUserId(user.getId()).stream().anyMatch(acc -> acc.getNumber().equals(num))) {
-                ModelAndView modelAndView = new ModelAndView("accounts/accountDetails");
-                modelAndView.addObject("account", accountService.findByNumber(num));
-                return modelAndView;
-            } else {
-                ModelAndView modelAndView = new ModelAndView("redirect:/error");
-                modelAndView.setStatus(HttpStatus.FORBIDDEN);
-                return modelAndView;
-            }
-        } catch (NoSuchElementException e) {
-            ModelAndView modelAndView = new ModelAndView("redirect:/error");
-            modelAndView.setStatus(HttpStatus.NOT_FOUND);
-            return modelAndView;
-        }
+            model.addAttribute("account", accountService.findByNumber(num, user.getId()));
+            return "accounts/accountDetails";
     }
 
     @PostMapping
@@ -52,60 +36,56 @@ public class AccountController {
 
     @PostMapping("/deposit")
     public String deposit(@RequestParam("accountNumber") long accountNumber,
-                          @RequestParam("amount") long amount,
-                          Authentication authentication) {
+                          @RequestParam(value = "amount", defaultValue = "0") long amount,
+                          Authentication authentication, Model model) {
         User user = (User) authentication.getPrincipal();
         try {
             accountService.deposit(user.getId(), accountNumber, amount);
-        } catch (IllegalArgumentException ignore) {
-            //TODO
+        } catch (IllegalArgumentException exception) {
+            model.addAttribute("account", accountService.findByNumber(accountNumber));
+            model.addAttribute("error", exception);
+            return "accounts/accountDetails";
         }
         return "redirect:/accounts/" + accountNumber;
     }
 
     @PostMapping("/withdraw")
     public String withdraw(@RequestParam("accountNumber") long accountNumber,
-                          @RequestParam("amount") long amount,
-                           Authentication authentication) {
+                          @RequestParam(value = "amount", defaultValue = "0") long amount,
+                           Authentication authentication, Model model) {
         User user = (User) authentication.getPrincipal();
         try {
             accountService.withdraw(user.getId(), accountNumber, amount);
-        } catch (IllegalArgumentException ignore) {
-            //TODO
+        } catch (IllegalArgumentException exception) {
+            model.addAttribute("account", accountService.findByNumber(accountNumber));
+            model.addAttribute("error", exception);
+            return "accounts/accountDetails";
         }
         return "redirect:/accounts/" + accountNumber;
     }
 
     @GetMapping("/{num}/transfer")
-    public ModelAndView transferPage(@PathVariable("num") long senderNumber, Authentication authentication) {
+    public String transferPage(@PathVariable("num") long senderNumber, Authentication authentication, Model model) {
 
         User user = (User) authentication.getPrincipal();
+        accountService.findByNumber(senderNumber, user.getId());
 
-        try {
-            if (accountService.findAllByUserId(user.getId()).stream().anyMatch(acc -> acc.getNumber().equals(senderNumber))) {
-                ModelAndView modelAndView = new ModelAndView("accounts/transferPage");
-                modelAndView.addObject("senderNumber", senderNumber);
-                return modelAndView;
-            } else {
-                ModelAndView modelAndView = new ModelAndView("redirect:/error");
-                modelAndView.setStatus(HttpStatus.FORBIDDEN);
-                return modelAndView;
-            }
-        } catch (NoSuchElementException exception) {
-            ModelAndView modelAndView = new ModelAndView("redirect:/error");
-            modelAndView.setStatus(HttpStatus.NOT_FOUND);
-            return modelAndView;
-        }
+        model.addAttribute("senderNumber", senderNumber);
+        return "accounts/transferPage";
     }
 
     @PostMapping("/{num}/transfer")
     public String transfer(@PathVariable("num") long senderNumber,
                            @RequestParam("recipientNumber") long recipientNumber,
                            @RequestParam("amount") long amount,
-                           Authentication authentication) {
+                           Authentication authentication, Model model) {
         User user = (User) authentication.getPrincipal();
         try {
             accountService.transfer(user.getId(), senderNumber, recipientNumber, amount);
+        } catch (IllegalArgumentException exception) {
+            model.addAttribute("senderNumber", senderNumber);
+            model.addAttribute("error", exception);
+            return "accounts/transferPage";
         } catch (UnsupportedOperationException exception) {
             //TODO
         }

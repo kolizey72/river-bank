@@ -4,29 +4,26 @@ import com.github.kolizey72.riverbank.entity.Account;
 import com.github.kolizey72.riverbank.entity.Operation;
 import com.github.kolizey72.riverbank.entity.OperationType;
 import com.github.kolizey72.riverbank.entity.User;
+import com.github.kolizey72.riverbank.exception.NotFoundException;
 import com.github.kolizey72.riverbank.repository.AccountRepository;
-import com.github.kolizey72.riverbank.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Transactional(readOnly = true)
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final UserRepository userRepository;
     private final OperationService operationService;
 
 
     private final EntityManager entityManager;
 
-    public AccountService(AccountRepository accountRepository, UserRepository userRepository, OperationService operationService, EntityManager entityManager) {
+    public AccountService(AccountRepository accountRepository, OperationService operationService, EntityManager entityManager) {
         this.accountRepository = accountRepository;
-        this.userRepository = userRepository;
         this.operationService = operationService;
         this.entityManager = entityManager;
     }
@@ -36,11 +33,17 @@ public class AccountService {
     }
 
     public List<Account> findAllByUserId(long userId) {
-        return accountRepository.findAllByUserId(userId);
+        return accountRepository.findAllByUserIdOrderByNumber(userId);
     }
 
     public Account findByNumber(long number) {
-        return accountRepository.findById(number).orElseThrow(NoSuchElementException::new);
+        return accountRepository.findById(number).orElseThrow(() -> new NotFoundException(number, Account.class));
+    }
+
+    public Account findByNumber(long number, long userId) {
+        return accountRepository.findAllByUserId(userId).stream()
+                .filter(a -> a.getNumber().equals(number))
+                .findAny().orElseThrow(() -> new NotFoundException(number, Account.class));
     }
 
     @Transactional
@@ -65,11 +68,7 @@ public class AccountService {
             throw new IllegalArgumentException("Amount can't be less or equals 0");
         }
 
-        if (!isAccountOwner(userId, number)) {
-            throw new IllegalArgumentException(String.format("User %d has no access to account %d", userId, number));
-        }
-
-        Account account = findByNumber(number);
+        Account account = findByNumber(number, userId);
 
         account.setAmount(account.getAmount() + amount);
         operationService.create(new Operation(account, amount, OperationType.DEPOSIT));
@@ -81,11 +80,7 @@ public class AccountService {
             throw new IllegalArgumentException("Amount can't be less or equals 0");
         }
 
-        if (!isAccountOwner(userId, number)) {
-            throw new IllegalArgumentException(String.format("User %d has no access to account %d", userId, number));
-        }
-
-        Account account = findByNumber(number);
+        Account account = findByNumber(number, userId);
 
         if (account.getAmount() < amount) {
             throw new IllegalArgumentException("Not enough money");
@@ -101,12 +96,13 @@ public class AccountService {
             throw new IllegalArgumentException("Amount can't be less or equals 0");
         }
 
-        if (!isAccountOwner(userId, senderNumber)) {
-            throw new IllegalArgumentException(String.format("User %d has no access to account %d", userId, senderNumber));
+        Account sender = findByNumber(senderNumber, userId);
+        Account recipient;
+        try {
+            recipient = findByNumber(recipientNumber);
+        } catch (NotFoundException e) {
+            throw new IllegalArgumentException(String.format("Account %d doesn't exist", recipientNumber));
         }
-
-        Account sender = findByNumber(senderNumber);
-        Account recipient = findByNumber(recipientNumber);
 
         if (sender.getCurrency() != recipient.getCurrency()) {
             throw new UnsupportedOperationException(String.format("Can't convert %s to %s", sender.getCurrency(), recipient.getCurrency()));
@@ -120,9 +116,5 @@ public class AccountService {
         operationService.create(new Operation(sender, amount, OperationType.TRANSFER));
         recipient.setAmount(recipient.getAmount() + amount);
         operationService.create(new Operation(recipient, amount, OperationType.DEPOSIT));
-    }
-
-    private boolean isAccountOwner(long userId, long accountNumber) {
-        return findAllByUserId(userId).contains(findByNumber(accountNumber));
     }
 }

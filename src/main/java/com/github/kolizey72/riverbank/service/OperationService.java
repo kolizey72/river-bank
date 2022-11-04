@@ -1,13 +1,13 @@
 package com.github.kolizey72.riverbank.service;
 
 import com.github.kolizey72.riverbank.entity.Operation;
+import com.github.kolizey72.riverbank.exception.NotFoundException;
 import com.github.kolizey72.riverbank.repository.OperationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,7 +32,7 @@ public class OperationService {
     }
 
     public Operation findById(long id) {
-        return operationRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        return operationRepository.findById(id).orElseThrow(() -> new NotFoundException(id, Operation.class));
     }
 
     @Transactional

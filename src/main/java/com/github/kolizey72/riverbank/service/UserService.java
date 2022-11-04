@@ -3,6 +3,7 @@ package com.github.kolizey72.riverbank.service;
 import com.github.kolizey72.riverbank.entity.Account;
 import com.github.kolizey72.riverbank.entity.Currency;
 import com.github.kolizey72.riverbank.entity.User;
+import com.github.kolizey72.riverbank.exception.NotFoundException;
 import com.github.kolizey72.riverbank.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -48,13 +48,13 @@ public class UserService implements UserDetailsService {
     }
 
     public User findById(long id) {
-        return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id, User.class));
     }
 
     @Transactional
     public void register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setMaxAccounts(5);
+        user.setMaxAccounts(DEFAULT_MAX_ACCOUNTS);
 
         userRepository.save(user);
 

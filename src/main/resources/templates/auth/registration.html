@@ -11,15 +11,28 @@
     <input type="text" name="email" id="email" placeholder="Email">
   </label>
   <br>
+  <span th:errors="*{email}" style="color: red;" th:if="${#fields.hasErrors('email')}"></span>
+  <br>
 
   <label for="name">
     <input type="text" name="name" id="name" placeholder="Name">
   </label>
   <br>
+  <span th:errors="*{name}" style="color: red;" th:if="${#fields.hasErrors('name')}"></span>
+  <br>
 
   <label for="password">
     <input type="password" name="password" id="password" placeholder="Password">
   </label>
+  <br>
+  <span th:errors="*{password}" style="color: red;" th:if="${#fields.hasErrors('password')}"></span>
+  <br>
+
+  <label for="matchingPassword">
+    <input type="password" name="matchingPassword" id="matchingPassword" placeholder="Confirm password">
+  </label>
+  <br>
+  <span th:errors="*{matchingPassword}" style="color: red;" th:if="${#fields.hasErrors('matchingPassword')}"></span>
   <br>
 
   <button type="submit">Sign up</button>

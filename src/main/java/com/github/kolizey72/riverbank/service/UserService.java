@@ -3,6 +3,7 @@ package com.github.kolizey72.riverbank.service;
 import com.github.kolizey72.riverbank.entity.Account;
 import com.github.kolizey72.riverbank.entity.Currency;
 import com.github.kolizey72.riverbank.entity.User;
+import com.github.kolizey72.riverbank.entity.dto.RegistrationForm;
 import com.github.kolizey72.riverbank.exception.NotFoundException;
 import com.github.kolizey72.riverbank.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmailIgnoreCase(email);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -51,9 +52,23 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id, User.class));
     }
 
+    public Optional<User> findByNameIgnoreCase(String name) {
+        return userRepository.findByNameIgnoreCase(name);
+    }
+
+    public Optional<User> findByEmailIgnoreCase(String email) {
+        return userRepository.findByEmailIgnoreCase(email);
+    }
+
+
+
     @Transactional
-    public void register(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public void register(RegistrationForm registrationForm) {
+        User user = new User();
+
+        user.setName(registrationForm.getName());
+        user.setEmail(registrationForm.getEmail().toLowerCase());
+        user.setPassword(passwordEncoder.encode(registrationForm.getPassword()));
         user.setMaxAccounts(DEFAULT_MAX_ACCOUNTS);
 
         userRepository.save(user);

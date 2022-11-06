@@ -3,42 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign up</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/static/css/bootstrap.min.css">
 </head>
 <body>
 
-<form method="post" th:action="@{/auth/registration}" th:object="${user}">
-  <label for="email">
-    <input type="text" name="email" id="email" placeholder="Email">
-  </label>
-  <br>
-  <span th:errors="*{email}" style="color: red;" th:if="${#fields.hasErrors('email')}"></span>
-  <br>
+<div class="container text-center mt-5" style="max-width: 300px">
+    <form method="post" th:action="@{/auth/registration}" th:object="${user}">
 
-  <label for="name">
-    <input type="text" name="name" id="name" placeholder="Name">
-  </label>
-  <br>
-  <span th:errors="*{name}" style="color: red;" th:if="${#fields.hasErrors('name')}"></span>
-  <br>
+        <label for="email" class="form-label text-start col-12">Email: </label>
+        <input type="text" class="form-control" th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}"
+               name="email" id="email" placeholder="email@example.com">
+        <div class="invalid-feedback text-start" th:errors="*{email}"></div>
 
-  <label for="password">
-    <input type="password" name="password" id="password" placeholder="Password">
-  </label>
-  <br>
-  <span th:errors="*{password}" style="color: red;" th:if="${#fields.hasErrors('password')}"></span>
-  <br>
+        <label for="name" class="form-label text-start col-12 mt-2">Name: </label>
+        <input type="text" class="form-control" th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}"
+               name="name" id="name" placeholder="Mr. Customer">
+        <div class="invalid-feedback text-start" th:errors="*{name}"></div>
 
-  <label for="matchingPassword">
-    <input type="password" name="matchingPassword" id="matchingPassword" placeholder="Confirm password">
-  </label>
-  <br>
-  <span th:errors="*{matchingPassword}" style="color: red;" th:if="${#fields.hasErrors('matchingPassword')}"></span>
-  <br>
+        <label for="password" class="form-label text-start col-12 mt-2">Password: </label>
+        <input type="password" class="form-control" th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}"
+               name="password" id="password" placeholder="********">
+        <div class="invalid-feedback text-start" th:errors="*{password}"></div>
 
-  <button type="submit">Sign up</button>
-</form>
+        <label for="matchingPassword" class="form-label text-start col-12 mt-2">Confirm password:</label>
+        <input type="password" class="form-control" th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}"
+               name="matchingPassword" id="matchingPassword" placeholder="********">
+        <div class="invalid-feedback text-start" th:errors="*{matchingPassword}"></div>
 
-<a th:href="@{/auth/login}">Sign in</a>
+        <button type="submit" class="btn btn-success my-2">Sign up</button>
+
+    </form>
+
+    <p>Already have an account? <a th:href="@{/auth/login}">Sign in</a></p>
+
+</div>
 
 </body>
 </html>

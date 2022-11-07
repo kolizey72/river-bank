@@ -30,7 +30,7 @@
             <button type="submit" class="btn btn-warning">Withdraw</button>
         </form>
 
-        <div th:if="${error}" class="alert alert-danger mt-2 w-25" th:text="${error.message}">Exception here</div>
+        <div th:if="${error}" class="alert alert-danger mt-2 w-25" role="alert" th:text="${error.message}">Exception here</div>
     </div>
     <div class="py-2 border-top">
         <a class="btn btn-primary" th:href="@{/accounts/{num}/transfer(num=${account.number})}">Make a transfer</a>

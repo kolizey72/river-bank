@@ -3,28 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Operations</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/static/css/bootstrap.min.css">
 </head>
 <body>
 
 <a th:href="@{/accounts/{num}(num=${account.number})}"><<< Go back</a>
 
-<h3 th:text="'Account ' + ${#numbers.formatInteger(account.number, 6)} + ' operations history'">Account 000000</h3>
 
 
 
-<table>
-    <tr>
-        <th>Amount</th>
-        <th>Operation type</th>
-        <th>Date&Time</th>
-    </tr>
-    <tr th:each="operation : ${operations}"
-        th:styleappend="${operation.type.name() == 'DEPOSIT' ? 'color : green' : ''} + ${operation.type.name() == 'WITHDRAW' ? 'color : red' : ''}">
-        <td th:text="${operation.amount} + ' ' + ${account.currency}"></td>
-        <td th:text="${operation.type}"></td>
-        <td th:text="${#temporals.format(operation.dateTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
-    </tr>
-</table>
+<div class="container border rounded">
+    <h3 class="border-bottom py-2" th:text="'Account ' + ${#numbers.formatInteger(account.number, 6)} + ' operations history'">Account 000000 operations history</h3>
+
+    <table class="table table-s">
+        <tr>
+            <th>Amount</th>
+            <th>Operation type</th>
+            <th>Date&Time</th>
+        </tr>
+        <tr th:each="operation : ${operations}"
+            th:classappend="${operation.type.name() == 'DEPOSIT' ? 'table-success' : ''} + ${operation.type.name() == 'WITHDRAW' ? 'table-danger' : ''} + ${operation.type.name() == 'TRANSFER' ? 'table-warning' : ''}">
+            <td th:text="${operation.amount} + ' ' + ${account.currency}">100 RUB</td>
+            <td th:text="${operation.type}">DEPOSIT</td>
+            <td th:text="${#temporals.format(operation.dateTime, 'dd-MM-yyyy HH:mm:ss')}"> 01.01.01 12:00:00</td>
+        </tr>
+    </table>
+</div>
+
 
 </body>
 </html>

@@ -34,6 +34,13 @@ public class AccountController {
         return "redirect:/";
     }
 
+    @DeleteMapping("/{num}")
+    public String delete(@PathVariable("num") long number, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        accountService.delete(number, user.getId());
+        return "redirect:/";
+    }
+
     @PostMapping("/deposit")
     public String deposit(@RequestParam("accountNumber") long accountNumber,
                           @RequestParam(value = "amount", defaultValue = "0") long amount,

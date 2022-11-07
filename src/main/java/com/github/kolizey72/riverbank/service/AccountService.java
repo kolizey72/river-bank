@@ -58,8 +58,14 @@ public class AccountService {
     }
 
     @Transactional
-    public void delete(long id) {
-        accountRepository.deleteById(id);
+    public void delete(long number, long userId) {
+        Account account = findByNumber(number, userId);
+
+        if (account.getAmount() == 0) {
+            accountRepository.deleteById(number);
+        } else {
+            throw new UnsupportedOperationException(String.format("Account %d: balance must be 0", number));
+        }
     }
 
     @Transactional

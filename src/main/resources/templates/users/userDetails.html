@@ -7,15 +7,13 @@
 </head>
 <body>
 
+<header th:insert="header :: header"></header>
+
 <div class="container mt-5 border rounded">
 
     <div class="border-bottom my-1">
         <h3 th:text="${user.name}">Mr. Name Surname</h3>
         <h5 th:text="${user.email}" class="text-muted">email@email.com</h5>
-        <!--        <form method="post" action="/logout">-->
-        <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
-        <!--            <button type="submit">Log out</button>-->
-        <!--        </form>-->
     </div>
 
     <div class="my-2">

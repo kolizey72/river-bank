@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<a th:href="@{/accounts/{num}(num=${senderNumber})}"><<< Go back</a>
+<header th:insert="header :: header"></header>
 
 <div class="container border rounded mt-5">
     <h3 class="border-bottom py-2">Make a transfer</h3>
@@ -17,7 +17,12 @@
         <table>
             <tr>
                 <td><label class="form-label pe-2" for="senderNumber">From</label></td>
-                <td><input name="senderNumber" class="form-control text-muted" id="senderNumber" th:value="${senderNumber}" readonly></td>
+                <td>
+                    <select id="senderNumber" name="senderNumber">
+                        <option th:each="acc : ${userAccounts}" th:value="${acc.number}" th:selected="${acc.number == senderNumber}"
+                                th:text="${acc.number} + ' [' + ${acc.amount} + ' ' + ${acc.currency} + ']'"></option>
+                    </select>
+                </td>
             </tr>
 
         <tr>

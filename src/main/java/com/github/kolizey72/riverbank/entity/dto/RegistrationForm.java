@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -19,7 +18,7 @@ public class RegistrationForm {
     @Getter @Setter
     private String email;
 
-    @Min(value = 8, message = "Password must be 8 digits min")
+    @Size(min = 8, message = "Password must be 8 digits min")
     @Getter @Setter
     private String password;
 

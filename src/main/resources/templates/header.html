@@ -35,6 +35,12 @@
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
+                <li sec:authorize="!isAuthenticated()" class="nav-item ms-1">
+                    <a class="btn btn-light text-primary" th:href="@{/auth/login}">Sign in</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item ms-1">
+                    <a class="btn btn-light text-success" th:href="@{/auth/registration}">Sign up</a>
+                </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item ms-1">
                     <form method="post" action="/logout">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">

@@ -4,7 +4,6 @@ import com.github.kolizey72.riverbank.entity.Account;
 import com.github.kolizey72.riverbank.entity.Currency;
 import com.github.kolizey72.riverbank.entity.User;
 import com.github.kolizey72.riverbank.service.AccountService;
-import com.github.kolizey72.riverbank.service.OperationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,15 +14,13 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     private final AccountService accountService;
-    private final OperationService operationService;
 
-    public AccountController(AccountService accountService, OperationService operationService) {
+    public AccountController(AccountService accountService) {
         this.accountService = accountService;
-        this.operationService = operationService;
     }
 
     @RequestMapping("/{num}")
-    public String accountDetails(@PathVariable long num,
+    public String show(@PathVariable long num,
                                  Authentication authentication, Model model) {
             User user = (User) authentication.getPrincipal();
 
@@ -33,13 +30,13 @@ public class AccountController {
     }
 
     @PostMapping
-    public String createAccount(@RequestParam("currency") Currency currency,
+    public String create(@RequestParam("currency") Currency currency,
                                 Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         accountService.create(new Account(0L, currency), user.getId());
 
-        return "redirect:/";
+        return "redirect:/profile";
     }
 
     @DeleteMapping("/{num}")
@@ -49,18 +46,6 @@ public class AccountController {
 
         accountService.delete(number, user.getId());
 
-        return "redirect:/";
-    }
-
-    @GetMapping("/{num}/operations")
-    public String showOperations(@PathVariable long num,
-                                 Authentication authentication, Model model) {
-        User user = (User) authentication.getPrincipal();
-        Account account = accountService.findByNumber(num, user.getId());
-
-        model.addAttribute("account", account);
-        model.addAttribute("operations", operationService.findAllByAccountNumber(num));
-
-        return "operations/list";
+        return "redirect:/profile";
     }
 }

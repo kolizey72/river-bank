@@ -19,9 +19,9 @@
                     <a class="nav-link" th:classappend="${isHomePage ? 'active' : ''}"
                        th:attrappend="aria-current=${isHomePage? 'page' : ''}" href="/">Home</a>
                 </li>
-                <li class="nav-item" th:with="isProfilePage = ${#httpServletRequest.requestURI == '/'}">
+                <li class="nav-item" th:with="isProfilePage = ${#httpServletRequest.requestURI == '/profile'}">
                     <a class="nav-link" th:classappend="${isProfilePage ? 'active' : ''}"
-                       th:attrappend="aria-current=${isProfilePage? 'page' : ''}" href="/">Profile</a>
+                       th:attrappend="aria-current=${isProfilePage? 'page' : ''}" href="/profile">Profile</a>
                 </li>
                 <li class="nav-item" th:with="isTransferPage = ${#httpServletRequest.requestURI == '/transfer'}">
                     <a class="nav-link" th:classappend="${isTransferPage ? 'active' : ''}"

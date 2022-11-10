@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <title>Operations</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/static/css/bootstrap.min.css">
 </head>
 <body>
 
 <header th:insert="header :: header"></header>
 
 <div class="container mt-5 border rounded">
-    <h3 th:if="${account}" class="border-bottom py-2" th:text="'Account ' + ${#numbers.formatInteger(account.number, 6)} + ' operations history'"></h3>
+    <h3 th:if="${account}" class="border-bottom py-2"
+        th:text="'Account ' + ${#numbers.formatInteger(account.number, 6)} + ' operations history'"></h3>
     <h3 th:if="${user}" class="border-bottom py-2" th:text="${user.name} + ' operations history'"></h3>
 
     <table class="table table-s">
@@ -33,9 +34,60 @@
             <td th:text="${#temporals.format(operation.dateTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
         </tr>
     </table>
+
+    <nav aria-label="Operations navigation">
+        <ul class="pagination pagination-sm">
+            <li class="page-item" th:classappend="${page == 1 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{${#request.requestURI}(page=${page - 1})}">Previous</a>
+            </li>
+
+            <li class="page-item" th:classappend="${page == 1 ? 'active' : ''}">
+                <span class="page-link" th:if="${page == 1}">1</span>
+                <a class="page-link" th:unless="${page == 1}" th:href="@{${#request.requestURI}(page=1)}">1</a>
+            </li>
+            <li class="page-item" th:if="${totalPages > 1}" th:classappend="${page == 2 ? 'active' : ''}">
+                <span class="page-link" th:if="${page == 2}">2</span>
+                <a class="page-link" th:unless="${page == 2}" th:href="@{${#request.requestURI}(page=2)}">2</a>
+            </li>
+
+            <li class="page-item disabled" th:if="${page > 4}"><span class="page-link">...</span></li>
+
+            <li class="page-item" th:if="${page > 3 && page < totalPages}">
+                <a class="page-link" th:href="@{${#request.requestURI}(page=${page - 1})}" th:text="${page - 1}"></a>
+            </li>
+            <li class="page-item active" th:if="${page > 2 && page < totalPages - 1}">
+                <span class="page-link" th:text="${page}"></span>
+            </li>
+            <li class="page-item" th:if="${page < totalPages - 2 && page > 1}">
+                <a class="page-link" th:href="@{${#request.requestURI}(page=${page + 1})}" th:text="${page + 1}"></a>
+            </li>
+
+            <li class="page-item disabled" th:if="${page < totalPages - 3}"><span class="page-link">...</span></li>
+
+            <li class="page-item" th:if="${totalPages > 3}" th:classappend="${page == totalPages - 1 ? 'active' : ''}">
+                <span class="page-link" th:if="${page == totalPages - 1}" th:text="${totalPages - 1}"></span>
+                <a class="page-link" th:unless="${page == totalPages - 1}"
+                   th:href="@{${#request.requestURI}(page=${totalPages - 1})}" th:text="${totalPages - 1}"></a>
+            </li>
+            <li class="page-item" th:if="${totalPages > 2}" th:classappend="${page == totalPages ? 'active' : ''}">
+                <span class="page-link" th:if="${page == totalPages}" th:text="${totalPages}"></span>
+                <a class="page-link" th:unless="${page == totalPages}"
+                   th:href="@{${#request.requestURI}(page=${totalPages})}" th:text="${totalPages}"></a>
+            </li>
+
+            <li class="page-item" th:classappend="${page == totalPages ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{${#request.requestURI}(page=${page + 1})}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
-<div th:if="${account}" class="container mt-3">
+<div class="container">
+
+</div>
+
+
+<div th:if="${account}" class="container my-3">
     <a class="btn btn-secondary" th:href="@{/accounts/{num}(num=${account.number})}">Go back</a>
 </div>
 

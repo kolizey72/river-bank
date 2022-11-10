@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Operations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css">
+</head>
+<body>
+
+<header th:insert="header :: header"></header>
+
+<div class="container mt-5 border rounded">
+    <h3 th:if="${account}" class="border-bottom py-2" th:text="'Account ' + ${#numbers.formatInteger(account.number, 6)} + ' operations history'"></h3>
+    <h3 th:if="${user}" class="border-bottom py-2" th:text="${user.name} + ' operations history'"></h3>
+
+    <table class="table table-s">
+        <tr>
+            <th th:if="${user}">Account</th>
+            <th>Amount</th>
+            <th>Operation type</th>
+            <th>Date&Time</th>
+        </tr>
+        <tr th:each="operation : ${operations}"
+            th:classappend=
+                    "${operation.type.name() == 'DEPOSIT' ? 'table-success' : ''}
+                    + ${operation.type.name() == 'WITHDRAW' ? 'table-danger' : ''}
+                    + ${operation.type.name() == 'TRANSFER' ? 'table-warning' : ''}
+                    + ${operation.type.name() == 'CREATION' ? 'table-primary' : ''}">
+            <td th:if="${user}" th:text="${#numbers.formatInteger(operation.account.number, 6)}"></td>
+            <td th:text="${operation.amount} + ' ' + ${operation.account.currency}"></td>
+            <td th:text="${operation.type}"></td>
+            <td th:text="${#temporals.format(operation.dateTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
+        </tr>
+    </table>
+</div>
+
+<div th:if="${account}" class="container mt-3">
+    <a class="btn btn-secondary" th:href="@{/accounts/{num}(num=${account.number})}">Go back</a>
+</div>
+
+</body>
+</html>

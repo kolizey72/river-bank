@@ -28,10 +28,6 @@ public class AccountService {
         this.entityManager = entityManager;
     }
 
-    public List<Account> findAll() {
-        return accountRepository.findAll();
-    }
-
     public List<Account> findAllByUserId(long userId) {
         return accountRepository.findAllByUserIdOrderByNumber(userId);
     }

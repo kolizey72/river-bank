@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 
-    List<Operation> findAllByAccountUserId(long userId);
+    List<Operation> findAllByAccountUserIdOrderByDateTimeDesc(long userId);
 
     List<Operation> findAllByAccountNumberOrderByDateTimeDesc(long accountNumber);
 }

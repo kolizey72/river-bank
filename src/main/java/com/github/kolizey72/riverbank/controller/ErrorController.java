@@ -12,7 +12,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     @GetMapping("/error")
     public ModelAndView errorPage(HttpServletRequest httpRequest) {
         ModelAndView modelAndView = new ModelAndView("error");
-        String message = "";
+        String message;
         int statusCode = getStatusCode(httpRequest);
         switch (statusCode) {
             case 400 -> message = "400 Bad Request";

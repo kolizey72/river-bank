@@ -1,7 +1,6 @@
 package com.github.kolizey72.riverbank.service;
 
 import com.github.kolizey72.riverbank.entity.Operation;
-import com.github.kolizey72.riverbank.exception.NotFoundException;
 import com.github.kolizey72.riverbank.repository.OperationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,30 +18,17 @@ public class OperationService {
         this.operationRepository = operationRepository;
     }
 
-    public List<Operation> findAll() {
-        return operationRepository.findAll();
-    }
-
     public List<Operation> findAllByUserId(long userId) {
-        return operationRepository.findAllByAccountUserId(userId);
+        return operationRepository.findAllByAccountUserIdOrderByDateTimeDesc(userId);
     }
 
-    public List<Operation> findAllByAccountNumberReverseOrder(long accountNumber) {
+    public List<Operation> findAllByAccountNumber(long accountNumber) {
         return operationRepository.findAllByAccountNumberOrderByDateTimeDesc(accountNumber);
-    }
-
-    public Operation findById(long id) {
-        return operationRepository.findById(id).orElseThrow(() -> new NotFoundException(id, Operation.class));
     }
 
     @Transactional
     public void create(Operation operation) {
         operation.setDateTime(LocalDateTime.now());
         operationRepository.save(operation);
-    }
-
-    @Transactional
-    public void delete(long id) {
-        operationRepository.deleteById(id);
     }
 }

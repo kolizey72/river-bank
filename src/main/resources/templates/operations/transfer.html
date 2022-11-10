@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transfer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css">
+</head>
+<body>
+
+<header th:insert="header :: header"></header>
+
+<div class="container border rounded mt-5">
+    <h3 class="border-bottom py-2">Make a transfer</h3>
+
+    <form method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+        <table>
+            <tr>
+                <td><label class="form-label pe-2" for="senderNumber">From</label></td>
+                <td>
+                    <select id="senderNumber" name="senderNumber">
+                        <option th:each="acc : ${userAccounts}" th:value="${acc.number}"
+                                th:selected="${acc.number == senderNumber}"
+                                th:text="${acc.number} + ' [' + ${acc.amount} + ' ' + ${acc.currency} + ']'"></option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label class="form-label pe-2" for="recipientNumber">To</label></td>
+                <td><input name="recipientNumber" class="form-control" id="recipientNumber" type="text"></td>
+            </tr>
+
+            <tr>
+                <td><label class="form-label pe-2" for="amount">Amount</label></td>
+                <td><input name="amount" class="form-control" id="amount" type="number" min="0" max="100000"></td>
+            </tr>
+        </table>
+
+        <button class="btn btn-primary my-2" type="submit">Transfer</button>
+    </form>
+
+    <div th:if="${error}" class="alert alert-danger w-25" role="alert" th:text="${error.message}"></div>
+</div>
+
+<div th:if="${senderNumber}" class="container mt-3">
+    <a class="btn btn-secondary" th:href="@{/accounts/{num}(num=${senderNumber})}">Go back</a>
+</div>
+
+</body>
+</html>

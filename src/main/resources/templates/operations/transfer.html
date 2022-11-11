@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Transfer</title>
+    <title th:text="#{transfer.title} + ' | River Bank'">Transfer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css">
 </head>
@@ -11,15 +11,16 @@
 <div th:insert="header :: header"></div>
 
 <div class="container border rounded mt-5">
-    <h3 class="border-bottom py-2">Make a transfer</h3>
+    <h3 class="border-bottom py-2" th:text="#{transfer.make}">Make a transfer</h3>
 
     <form method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
         <table>
             <tr>
-                <td><label class="form-label pe-2" for="senderNumber">From</label></td>
-                <td>
+                <td><label class="form-label pe-2" for="senderNumber"
+                                                          th:text="#{transfer.from}">From</label></td>
+                <td style="vertical-align: top">
                     <select id="senderNumber" name="senderNumber">
                         <option th:each="acc : ${userAccounts}" th:value="${acc.number}"
                                 th:selected="${acc.number == senderNumber}"
@@ -29,25 +30,29 @@
             </tr>
 
             <tr>
-                <td><label class="form-label pe-2" for="recipientNumber">To</label></td>
+                <td style="vertical-align: bottom"><label class="form-label pe-2" for="recipientNumber"
+                                                          th:text="#{transfer.to}">To</label></td>
                 <td><input name="recipientNumber" class="form-control" id="recipientNumber" type="text"></td>
             </tr>
 
             <tr>
-                <td><label class="form-label pe-2" for="amount">Amount</label></td>
+                <td style="vertical-align: bottom"><label class="form-label pe-2" for="amount"
+                                                          th:text="#{transfer.amount}">Amount</label></td>
                 <td><input name="amount" class="form-control" id="amount" type="number" min="0" max="100000"></td>
             </tr>
         </table>
 
-        <button class="btn btn-primary my-2" type="submit">Transfer</button>
+        <button class="btn btn-primary my-2" type="submit" th:text="#{transfer.submit}">Transfer</button>
     </form>
 
     <div th:if="${error}" class="alert alert-danger w-25" role="alert" th:text="${error.message}"></div>
 </div>
 
 <div th:if="${senderNumber}" class="container my-3">
-    <a class="btn btn-secondary" th:href="@{/accounts/{num}(num=${senderNumber})}">Go back</a>
+    <a class="btn btn-secondary" th:href="@{/accounts/{num}(num=${senderNumber})}" th:text="#{util.go_back}">Go back</a>
 </div>
+
+<div th:insert="footer :: footer"></div>
 
 </body>
 </html>

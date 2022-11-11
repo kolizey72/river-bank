@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/static/css/bootstrap.min.css">
 </head>
-<body>
+<body style="padding-bottom: 50px;">
 
 <div th:insert="header :: header"></div>
 
@@ -82,14 +82,11 @@
     </nav>
 </div>
 
-<div class="container">
-
-</div>
-
-
 <div th:if="${account}" class="container my-3">
     <a class="btn btn-secondary" th:href="@{/accounts/{num}(num=${account.number})}">Go back</a>
 </div>
+
+<div th:insert="footer :: footer"></div>
 
 </body>
 </html>

@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .usernameParameter("email")
                 .loginProcessingUrl("/auth/login")
                 .failureUrl("/auth/login?error")
-                .defaultSuccessUrl("/",true)
+                .defaultSuccessUrl("/profile",true)
                 .failureUrl("/auth/login?error");
 
         return http.build();

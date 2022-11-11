@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>River Bank</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="/static/css/bootstrap.min.css">
 </head>
@@ -11,17 +11,17 @@
 <div th:insert="header :: header"></div>
 
 <div class="container border rounded my-5 lead">
-    <h2 class="display-3 py-2">Welcome to River Bank</h2>
+    <h2 class="display-3 py-2" th:text="#{home.welcome}">Welcome to River Bank</h2>
 
-    <p>This is not a real bank.</p>
-    <p>This site is a mock web application of non-existent bank. It implements basic banking operations, such as
+    <p th:utext="#{home.text1}">This is not a real bank.</p>
+    <p th:utext="#{home.text2}">This site is a mock web application of non-existent bank. It implements basic banking operations, such as
         deposit, withdraw and transfer. Moreover, all operations are saved and can be browsed anytime. To get started
-        click <a href="/auth/registration/">sign up</a> .</p>
-    <p>If you don't want to get through registration, you may use
-        <a href="#" onclick="document.getElementById('test').submit()">Testing account</a>.</p>
-    <p>Used technologies: Java, Spring Framework(MVC, Boot, Security, Data JPA), Hibernate ORM, PostgreSQL, HTML/CSS,
+        click <a href="/auth/registration/">sign up</a>.</p>
+    <p th:utext="#{home.text3}">If you don't want to get through registration, you may use
+        <a href="#" onclick="document.getElementById('test').submit()">testing account</a>.</p>
+    <p th:utext="#{home.text4}">Used technologies: Java, Spring Framework(MVC, Boot, Security, Data JPA), Hibernate ORM, PostgreSQL, HTML/CSS,
         Thymeleaf, Bootstrap.</p>
-    <p>For more information, please check <a href="https://github.com/kolizey72/river-bank" target="_blank">GitHub</a>.
+    <p th:utext="#{home.text5}">For more information, please check <a href="https://github.com/kolizey72/river-bank" target="_blank">GitHub</a>.
     </p>
 </div>
 
@@ -30,6 +30,8 @@
     <input type="hidden" name="email" value="test@test.com">
     <input type="hidden" name="password" value="testtest">
 </form>
+
+<div th:insert="footer :: footer"></div>
 
 </body>
 </html>

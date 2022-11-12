@@ -31,7 +31,7 @@
                 <input class="form-control" type="number" name="amount" th:placeholder="#{account.amount}" min="0"
                        max="100000">
             </label>
-            <button type="submit" class="btn btn-success" th:text="#{account.deposit}">Deposit</button>
+            <button type="submit" class="btn btn-success my-1" th:text="#{account.deposit}">Deposit</button>
         </form>
 
         <form method="post" th:action="@{/withdraw}">
@@ -40,20 +40,20 @@
                 <input class="form-control" type="number" name="amount" th:placeholder="#{account.amount}" min="0"
                        max="100000">
             </label>
-            <button type="submit" class="btn btn-warning" th:text="#{account.withdraw}">Withdraw</button>
+            <button type="submit" class="btn btn-warning my-1" th:text="#{account.withdraw}">Withdraw</button>
         </form>
 
         <div th:if="${error}" class="alert alert-danger mt-2 w-25" role="alert" th:text="${error.message}"></div>
     </div>
 
     <div class="py-2 border-top">
-        <a class="btn btn-primary" th:href="@{/transfer(num=${account.number})}" th:text="#{account.transfer}">
+        <a class="btn btn-primary my-1" th:href="@{/transfer(num=${account.number})}" th:text="#{account.transfer}">
             Make a transfer</a>
 
-        <a class="btn btn-info text-white" th:href="@{/accounts/{num}/operations(num=${account.number})}"
+        <a class="btn btn-info text-white my-1" th:href="@{/accounts/{num}/operations(num=${account.number})}"
            th:text="#{account.operations_history}">Operations history</a>
 
-        <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteConfirmation"
+        <button class="btn btn-danger my-1" type="button" data-bs-toggle="modal" data-bs-target="#deleteConfirmation"
                 th:text="#{account.delete}">Delete
         </button>
 

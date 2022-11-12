@@ -18,10 +18,10 @@
 
         <table>
             <tr>
-                <td><label class="form-label pe-2" for="senderNumber"
+                <td style="vertical-align: bottom"><label class="form-label pe-2" for="senderNumber"
                                                           th:text="#{transfer.from}">From</label></td>
-                <td style="vertical-align: top">
-                    <select id="senderNumber" name="senderNumber">
+                <td>
+                    <select class="form-select" id="senderNumber" name="senderNumber">
                         <option th:each="acc : ${userAccounts}" th:value="${acc.number}"
                                 th:selected="${acc.number == senderNumber}"
                                 th:text="${acc.number} + ' [' + ${acc.amount} + ' ' + ${acc.currency} + ']'"></option>
@@ -54,5 +54,6 @@
 
 <div th:insert="footer :: footer"></div>
 
+<script th:src="@{/js/bootstrap.bundle.min.js}" src="/static/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
